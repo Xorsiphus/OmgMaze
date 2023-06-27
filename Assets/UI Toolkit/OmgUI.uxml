@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 20%; bottom: auto; position: absolute; width: 100%; top: 80%; left: 0;">
+            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="ScriptText" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
