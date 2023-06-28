@@ -1,5 +1,6 @@
-using System;
 using System.Collections.Generic;
+using Entities;
+using Enums;
 using UnityEngine;
 
 public class MazeGenerator : MonoBehaviour
@@ -69,17 +70,21 @@ public class MazeGenerator : MonoBehaviour
         if (primaryCell.x > secondaryCell.x)
         {
             _maze[primaryCell.x, primaryCell.y].LeftWall = false;
+            _maze[secondaryCell.x, secondaryCell.y].RightWall = false;
         }
         else if (primaryCell.x < secondaryCell.x)
         {
+            _maze[primaryCell.x, primaryCell.y].RightWall = false;
             _maze[secondaryCell.x, secondaryCell.y].LeftWall = false;
         }
         else if (primaryCell.y < secondaryCell.y)
         {
             _maze[primaryCell.x, primaryCell.y].TopWall = false;
+            _maze[secondaryCell.x, secondaryCell.y].BottomWall = false;
         }
         else if (primaryCell.y > secondaryCell.y)
         {
+            _maze[primaryCell.x, primaryCell.y].BottomWall = false;
             _maze[secondaryCell.x, secondaryCell.y].TopWall = false;
         }
     }
@@ -92,13 +97,18 @@ public class MazeGenerator : MonoBehaviour
         }
 
         _currentCell = new Vector2Int(x, y);
-
         var path = new List<Vector2Int>();
-
+        var finishCell = new Vector2Int();
         var deadEnd = false;
         while (!deadEnd)
         {
             var nextCell = CheckNeighbours();
+            if (!_maze[nextCell.x, nextCell.y].IsVisited)
+            {
+                finishCell.x = nextCell.x;
+                finishCell.y = nextCell.y;
+            }
+            
             _maze[_currentCell.x, _currentCell.y].IsVisited = true;
 
             if (nextCell == _currentCell)
@@ -121,6 +131,8 @@ public class MazeGenerator : MonoBehaviour
                 path.Add(_currentCell);
             }
         }
+
+        _maze[finishCell.x, finishCell.y].IsFinish = true;
     }
 
     public MazeCell[,] GetMaze()
@@ -141,31 +153,3 @@ public class MazeGenerator : MonoBehaviour
     }
 }
 
-public enum Direction
-{
-    Up,
-    Down,
-    Left,
-    Right
-}
-
-public class MazeCell
-{
-    public bool IsVisited;
-    public int X, Y;
-
-    public bool TopWall;
-    public bool LeftWall;
-
-    public Vector2Int Position => new(X, Y);
-
-    public MazeCell(int x, int y)
-    {
-        X = x;
-        Y = y;
-
-        IsVisited = false;
-
-        TopWall = LeftWall = true;
-    }
-}

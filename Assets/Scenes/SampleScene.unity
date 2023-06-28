@@ -176,7 +176,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135380330}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11, y: 0.6, z: 11}
+  m_LocalPosition: {x: 3, y: 0.5, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -260,7 +260,7 @@ Transform:
   m_GameObject: {fileID: 684425408}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.9, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 135380332}
@@ -509,10 +509,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f76cbb0b0993de8459f6406f56d4330b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mazeWidth: 21
-  mazeHeight: 21
-  startX: 11
-  startY: 11
+  mazeWidth: 5
+  mazeHeight: 5
+  startX: 3
+  startY: 3
 --- !u!4 &1202318297
 Transform:
   m_ObjectHideFlags: 0
@@ -674,7 +674,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1505992592}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11, y: 0.4, z: 11}
+  m_LocalPosition: {x: 3, y: 0.4, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -721,18 +721,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2596980062108162747, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 083d4c2dd58d04842954a80fe2f64b81, type: 2}
-    - target: {fileID: 4601176017928846036, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 083d4c2dd58d04842954a80fe2f64b81, type: 2}
-    - target: {fileID: 5736366620401220090, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 083d4c2dd58d04842954a80fe2f64b81, type: 2}
     - target: {fileID: 6749279375169309263, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -777,17 +765,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7336373284838783784, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 083d4c2dd58d04842954a80fe2f64b81, type: 2}
+    - target: {fileID: 8068034308569043976, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8528585931757104585, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
       propertyPath: m_Name
       value: MazeCell
-      objectReference: {fileID: 0}
-    - target: {fileID: 8528585931757104585, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

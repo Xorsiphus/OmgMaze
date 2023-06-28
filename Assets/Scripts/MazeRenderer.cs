@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Enums;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class MazeRenderer : MonoBehaviour
@@ -23,10 +23,11 @@ public class MazeRenderer : MonoBehaviour
             var images = GetImagesInRuntime();
             if (images != null) runtimeTextureList.AddRange(images);
         }
-        
+
         double sum = 0;
         var texList = new List<Tuple<Texture2D, double>>();
-        var textures = Resources.LoadAll("Images").Cast<Texture2D>().ToArray();
+        var finishWallTexture = Resources.Load<Texture2D>("Cat_Image/cat");
+        var textures = Resources.LoadAll("Wall_Images").Cast<Texture2D>().ToArray();
         textures.AddRange(runtimeTextureList);
         foreach (var tex in textures)
         {
@@ -41,29 +42,53 @@ public class MazeRenderer : MonoBehaviour
                 var newCell = Instantiate(mazeCellPrefab,
                     new Vector3(x * cellSize, 0f, y * cellSize), Quaternion.identity, transform);
 
+                var mazeCell = newCell.GetComponent<MazeCellObject>();
+                var top = maze[x, y].TopWall;
+                var bottom = maze[x, y].BottomWall;
+                var left = maze[x, y].LeftWall;
+                var right = maze[x, y].RightWall;
+
+                var finishWallNum = -1;
+                if (maze[x, y].IsFinish)
+                {
+                    finishWallNum = GetFinishDirection(top, bottom, left);
+                }
+
                 for (var i = 1; i < 7; i++)
                 {
                     var child = newCell.transform.GetChild(i);
                     var r = child.GetComponent<MeshRenderer>();
                     var rand = new System.Random().NextDouble();
-                    var tex = texList.SkipWhile(t => t.Item2 < rand).First();
-                    r.material.mainTexture = tex.Item1;
+                    var texPair = texList.SkipWhile(t => t.Item2 < rand).First();
+                    var tex = texPair.Item1;
+                    
+                    if (finishWallNum != -1 && finishWallNum == i)
+                    {
+                        r.material.mainTexture = finishWallTexture;
+                        Debug.Log($"{x} {y}");
+                        Debug.Log(i);
+                    }
+                    else
+                    {
+                        r.material.mainTexture = tex;   
+                    }
                 }
 
-                var mazeCell = newCell.GetComponent<MazeCellObject>();
-                var top = maze[x, y].TopWall;
-                var bottom = y == 0;
-                var left = maze[x, y].LeftWall;
-                var right = x == mazeGenerator.mazeWidth - 1;
-                mazeCell.Init(top, bottom, left, right);
+                mazeCell.Init(top, bottom, left, right, maze[x, y].IsFinish, finishWallNum);
             }
         }
     }
+    
+    private static int GetFinishDirection(bool up, bool down, bool left)
+        => !up ? 3
+            : !down ? 1
+            : !left ? 4
+            : 5; // Порядковый номер чайлда(стены) в префабе
 
     private static IEnumerable<Texture2D> GetImagesInRuntime()
     {
         if (!Directory.Exists($"{Application.dataPath}/Images")) return null;
-        
+
         var files = Directory
             .GetFiles($"{Application.dataPath}/Images")
             .Where(f => !f.Contains(".meta"))
