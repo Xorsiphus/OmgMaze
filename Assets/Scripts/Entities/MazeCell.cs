@@ -6,19 +6,20 @@ namespace Entities
     {
         public bool IsVisited;
         public bool IsFinish;
-        public int X, Y;
+        private readonly int _x;
+        private readonly int _y;
 
         public bool TopWall;
         public bool BottomWall;
         public bool LeftWall;
         public bool RightWall;
 
-        public Vector2Int Position => new(X, Y);
+        public Vector2Int Position => new(_x, _y);
 
         public MazeCell(int x, int y)
         {
-            X = x;
-            Y = y;
+            _x = x;
+            _y = y;
 
             IsVisited = false;
 

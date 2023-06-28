@@ -54,7 +54,7 @@ public class MazeRenderer : MonoBehaviour
                     finishWallNum = GetFinishDirection(top, bottom, left);
                 }
 
-                for (var i = 1; i < 7; i++)
+                for (var i = 1; i < 5; i++)
                 {
                     var child = newCell.transform.GetChild(i);
                     var r = child.GetComponent<MeshRenderer>();
@@ -65,8 +65,6 @@ public class MazeRenderer : MonoBehaviour
                     if (finishWallNum != -1 && finishWallNum == i)
                     {
                         r.material.mainTexture = finishWallTexture;
-                        Debug.Log($"{x} {y}");
-                        Debug.Log(i);
                     }
                     else
                     {
@@ -74,16 +72,17 @@ public class MazeRenderer : MonoBehaviour
                     }
                 }
 
-                mazeCell.Init(top, bottom, left, right, maze[x, y].IsFinish, finishWallNum);
+                mazeCell.Init(top, bottom, left, right, finishWallNum);
             }
         }
     }
     
     private static int GetFinishDirection(bool up, bool down, bool left)
-        => !up ? 3
-            : !down ? 1
-            : !left ? 4
-            : 5; // Порядковый номер чайлда(стены) в префабе
+        => // Порядковый номер чайлда(стены) в префабе
+            !up ? 2     // Bottom
+            : !down ? 1 // Top
+            : !left ? 3 // Right
+            : 4;        // Left
 
     private static IEnumerable<Texture2D> GetImagesInRuntime()
     {

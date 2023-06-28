@@ -2,10 +2,19 @@ using UnityEngine;
 
 public class PlaySoundOnMove : MonoBehaviour
 {
-    [SerializeField] private AudioSource wallSound;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip finishSound;
+    public bool isFinish;
 
     private void OnTriggerEnter(Collider other)
     {
-        wallSound.Play();
+        if (isFinish)
+        {
+            audioSource.PlayOneShot(finishSound);
+        }
+        else
+        {
+            audioSource.Play();
+        }
     }
 }

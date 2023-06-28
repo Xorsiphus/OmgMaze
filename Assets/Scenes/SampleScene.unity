@@ -773,6 +773,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MazeCell
       objectReference: {fileID: 0}
+    - target: {fileID: 8528585931757104585, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
