@@ -539,8 +539,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f76cbb0b0993de8459f6406f56d4330b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mazeWidth: 5
-  mazeHeight: 5
+  mazeWidth: 20
+  mazeHeight: 20
   startX: 3
   startY: 3
 --- !u!4 &1202318297
@@ -751,6 +751,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2605635406828323303, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4089777191411089126, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5845657178207136434, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629563913303883532, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6749279375169309263, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -795,17 +811,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8068034308569043976, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8528585931757104585, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
       propertyPath: m_Name
       value: MazeCell
-      objectReference: {fileID: 0}
-    - target: {fileID: 8528585931757104585, guid: 98ba60d09a4f5354aaf750677701a2de, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

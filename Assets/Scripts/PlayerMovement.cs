@@ -1,4 +1,3 @@
-using System;
 using ControlStrategies;
 using Enums;
 using UnityEngine;
@@ -7,22 +6,12 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")] public float moveSpeed;
 
-    [SerializeField] private StandardFpControlStrategy standardFpControlStrategy;
-    [SerializeField] private DirectionalControlStrategy directionalControlStrategy;
-
-    public Transform orientation;
-
-    private Vector3 _moveDirection;
-    private Vector3 _startPos;
-    private Vector3 _endPos;
-    private float _fractionWay;
+    [SerializeField] private ControlStrategyAbstract standardFpControlStrategy;
+    [SerializeField] private ControlStrategyAbstract directionalControlStrategy;
+    [SerializeField] private ControlType controlType;
 
     private Rigidbody _rb;
-
-    private bool _keyLock;
-    private bool _keyForward;
-    private bool _keyBack;
-    private Direction _lastDirection;
+    public Transform orientation;
 
     private void Start()
     {
@@ -32,50 +21,37 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // standardFpControlStrategy.ReadPlayerMovement();
-        DirectionalMove();
+        switch (controlType)
+        {
+            case ControlType.DirectionalControlStrategy:
+                directionalControlStrategy.ReadPlayerMovement();
+                break;
+            case ControlType.StandardFpControlStrategy:
+                standardFpControlStrategy.ReadPlayerMovement();
+                break;
+            default:
+                standardFpControlStrategy.ReadPlayerMovement();
+                break;
+        }
 
         SpeedControl();
     }
 
     private void FixedUpdate()
     {
-        // standardFpControlStrategy.UpdatePlayerMovement(orientation, _rb, moveSpeed);
-        MovePlayer();
-    }
-
-    private void DirectionalMove()
-    {
-        _keyForward = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
-        _keyBack = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
-
-        if ((_keyForward || _keyBack) && !_keyLock)
+        switch (controlType)
         {
-            _keyLock = true;
-            _lastDirection = _keyForward ? Direction.Up : Direction.Down;
-            var position = transform.position;
-            _startPos = position;
-            _endPos = _lastDirection == Direction.Up ? position + orientation.forward : position - orientation.forward;
-            _fractionWay = 0;
+            case ControlType.DirectionalControlStrategy:
+                directionalControlStrategy.UpdatePlayerMovement(orientation, _rb, moveSpeed);
+                break;
+            case ControlType.StandardFpControlStrategy:
+                standardFpControlStrategy.UpdatePlayerMovement(orientation, _rb, moveSpeed);
+                break;
+            default:
+                standardFpControlStrategy.UpdatePlayerMovement(orientation, _rb, moveSpeed);
+                break;
         }
     }
-
-    private void MovePlayer()
-    {
-        if (!IsKeyPressed)
-        {
-            _rb.velocity = Vector3.zero;
-        }
-        else
-        {
-            if (_lastDirection == Direction.Up) _fractionWay += 0.06f;
-            else _fractionWay -= 0.06f;
-            transform.position = Vector3.Lerp(_startPos, _endPos, _fractionWay);
-            if (CompareVector3(transform.position, _endPos)) _keyLock = false;
-        }
-    }
-
-    private bool IsKeyPressed => _keyForward || _keyBack || _keyLock;
 
     private void SpeedControl()
     {
@@ -87,9 +63,4 @@ public class PlayerMovement : MonoBehaviour
             _rb.velocity = new Vector3(limitedSpeed.x, velocity.y, limitedSpeed.z);
         }
     }
-
-    private static bool CompareVector3(Vector3 first, Vector3 second)
-        => !(Math.Abs(first.x - second.x) > 0.005f) && 
-           !(Math.Abs(first.y - second.y) > 0.005f) &&
-           !(Math.Abs(first.z - second.z) > 0.005f);
 }
