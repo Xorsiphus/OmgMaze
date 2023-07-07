@@ -3,6 +3,8 @@
     public enum ControlType
     {
         StandardFpControlStrategy,
-        DirectionalControlStrategy
+        DirectionalControlStrategy,
+        DirectionalAutoControlStrategy,
+        DirectionalRandomControlStrategy
     }
 }

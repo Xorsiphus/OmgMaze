@@ -2,7 +2,7 @@
 using Enums;
 using UnityEngine;
 
-namespace ControlStrategies
+namespace ControlStrategies.Impl
 {
     public class DirectionalControlStrategy : ControlStrategyAbstract
     {
@@ -10,7 +10,7 @@ namespace ControlStrategies
         private bool _keyLeft;
         private bool _keyRight;
         private bool _keyForward;
-        private bool _keyBack;
+        private bool _keyBackward;
         private Direction _lastDirection;
 
         private Vector3 _moveDirection;
@@ -20,10 +20,10 @@ namespace ControlStrategies
 
         private float _finRotation;
 
-        public override void UpdateRotation(ref float xRotation, ref float yRotation)
+        public override bool UpdateRotation(ref float xRotation, ref float yRotation)
         {
-            _keyLeft = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
-            _keyRight = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+            _keyLeft = moveInputListener.CheckLeftControl();
+            _keyRight = moveInputListener.CheckRightControl();
 
             if ((_keyLeft || _keyRight) && !_lockInput)
             {
@@ -32,7 +32,7 @@ namespace ControlStrategies
                 _lastDirection = _keyLeft ? Direction.Left : Direction.Right;
             }
 
-            if (!_lockInput) return;
+            if (!_lockInput) return true;
             switch (_lastDirection)
             {
                 case Direction.Left:
@@ -43,25 +43,25 @@ namespace ControlStrategies
                     yRotation += 1f;
                     if (yRotation >= _finRotation) _lockInput = false;
                     break;
+                case Direction.Up:
+                    break;
+                case Direction.Down:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+
+            return Math.Abs(yRotation - _finRotation) < 0.01;
         }
 
-        public override void UpdatePlayerMovement(Transform orientation, Rigidbody rb, float moveSpeed)
+        public override bool UpdatePlayerMovement(Transform orientation, Rigidbody rb, float moveSpeed)
         {
-            if (!IsKeyPressed && _lastDirection is Direction.Up or Direction.Down)
-            {
-                rb.velocity = Vector3.zero;
-            }
-            else if (_lastDirection is Direction.Up or Direction.Down)
-            {
-                _fractionWay += moveSpeed * 0.03f;
-                transform.position = Vector3.Lerp(_startPos, _endPos, _fractionWay);
-                if (CompareVector3(transform.position, _endPos)) _lockInput = false;
-            }
-
+            var isDone = false;
+            _keyForward = moveInputListener.CheckForwardControl();
+            _keyBackward = moveInputListener.CheckBackwardControl();
 
             if (!_lockInput && (_keyForward && CheckForWallForward(rb, orientation) ||
-                                _keyBack && CheckForWallBackward(rb, orientation)))
+                                _keyBackward && CheckForWallBackward(rb, orientation)))
             {
                 _lockInput = true;
                 _lastDirection = _keyForward ? Direction.Up : Direction.Down;
@@ -72,27 +72,31 @@ namespace ControlStrategies
                     : position - orientation.forward;
                 _fractionWay = 0;
             }
+            else isDone = true;
+            
+            if (!IsKeyPressed)
+            {
+                rb.velocity = Vector3.zero;
+            }
+            else if (_lastDirection is Direction.Up or Direction.Down)
+            {
+                _fractionWay += moveSpeed * 0.03f;
+                transform.position = Vector3.Lerp(_startPos, _endPos, _fractionWay);
+                if (CompareVector3(transform.position, _endPos))
+                {
+                    _lockInput = false;
+                    isDone = true;
+                }
+            }
+
+            return isDone;
         }
 
         public override void ReadPlayerMovement()
         {
-            _keyForward = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
-            _keyBack = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
         }
 
-        private bool CheckForWallForward(Rigidbody rb, Transform orientation)
-        {
-            var ray = new Ray(rb.position, orientation.forward);
-            return !Physics.Raycast(ray, 1.2f);
-        }
-
-        private bool CheckForWallBackward(Rigidbody rb, Transform orientation)
-        {
-            var ray = new Ray(rb.position, -orientation.forward);
-            return !Physics.Raycast(ray, 1.2f);
-        }
-
-        private bool IsKeyPressed => _keyForward || _keyBack || _lockInput;
+        private bool IsKeyPressed => _keyForward || _keyBackward || _lockInput;
 
         private static bool CompareVector3(Vector3 first, Vector3 second)
             => !(Math.Abs(first.x - second.x) > 0.005f) &&

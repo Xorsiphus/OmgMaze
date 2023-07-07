@@ -1,13 +1,11 @@
 using ControlStrategies;
-using Enums;
 using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
 {
     public Transform orientation;
-    [SerializeField] private StandardFpControlStrategy standardFpControlStrategy;
-    [SerializeField] private DirectionalControlStrategy directionalControlStrategy;
-    [SerializeField] private ControlType controlType;
+
+    [SerializeField] private ControlTypeWrapper controlTypeWrapper;
 
     private float _xRotation;
     private float _yRotation;
@@ -20,18 +18,7 @@ public class PlayerCam : MonoBehaviour
 
     private void Update()
     {
-        switch (controlType)
-        {
-            case ControlType.DirectionalControlStrategy:
-                directionalControlStrategy.UpdateRotation(ref _xRotation, ref _yRotation);
-                break;
-            case ControlType.StandardFpControlStrategy:
-                standardFpControlStrategy.UpdateRotation(ref _xRotation, ref _yRotation);
-                break;
-            default:
-                standardFpControlStrategy.UpdateRotation(ref _xRotation, ref _yRotation);
-                break;
-        }
+        controlTypeWrapper.GetControlStrategy().UpdateRotation(ref _xRotation, ref _yRotation);
 
         _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
         transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);

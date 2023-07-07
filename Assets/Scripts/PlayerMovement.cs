@@ -1,14 +1,11 @@
 using ControlStrategies;
-using Enums;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")] public float moveSpeed;
 
-    [SerializeField] private ControlStrategyAbstract standardFpControlStrategy;
-    [SerializeField] private ControlStrategyAbstract directionalControlStrategy;
-    [SerializeField] private ControlType controlType;
+    [SerializeField] private ControlTypeWrapper controlTypeWrapper;
 
     private Rigidbody _rb;
     public Transform orientation;
@@ -21,36 +18,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        switch (controlType)
-        {
-            case ControlType.DirectionalControlStrategy:
-                directionalControlStrategy.ReadPlayerMovement();
-                break;
-            case ControlType.StandardFpControlStrategy:
-                standardFpControlStrategy.ReadPlayerMovement();
-                break;
-            default:
-                standardFpControlStrategy.ReadPlayerMovement();
-                break;
-        }
-
+        controlTypeWrapper.GetControlStrategy().ReadPlayerMovement();
         SpeedControl();
     }
 
     private void FixedUpdate()
     {
-        switch (controlType)
-        {
-            case ControlType.DirectionalControlStrategy:
-                directionalControlStrategy.UpdatePlayerMovement(orientation, _rb, moveSpeed);
-                break;
-            case ControlType.StandardFpControlStrategy:
-                standardFpControlStrategy.UpdatePlayerMovement(orientation, _rb, moveSpeed);
-                break;
-            default:
-                standardFpControlStrategy.UpdatePlayerMovement(orientation, _rb, moveSpeed);
-                break;
-        }
+        controlTypeWrapper.GetControlStrategy().UpdatePlayerMovement(orientation, _rb, moveSpeed);
     }
 
     private void SpeedControl()
