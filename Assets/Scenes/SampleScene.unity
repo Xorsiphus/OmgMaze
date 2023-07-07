@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db56247bd074f4b8e47e5bee7bdfad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlType: 1
+  controlType: 0
   standardFpControlStrategy: {fileID: 135380334}
   directionalControlStrategy: {fileID: 135380335}
   directionalAutoControlStrategy: {fileID: 135380338}

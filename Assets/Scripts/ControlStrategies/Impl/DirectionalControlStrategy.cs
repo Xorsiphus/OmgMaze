@@ -36,11 +36,11 @@ namespace ControlStrategies.Impl
             switch (_lastDirection)
             {
                 case Direction.Left:
-                    yRotation -= 1f;
+                    yRotation -= 2f;
                     if (yRotation <= _finRotation) _lockInput = false;
                     break;
                 case Direction.Right:
-                    yRotation += 1f;
+                    yRotation += 2f;
                     if (yRotation >= _finRotation) _lockInput = false;
                     break;
                 case Direction.Up:

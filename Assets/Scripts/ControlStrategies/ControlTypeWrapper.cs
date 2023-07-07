@@ -1,5 +1,7 @@
-﻿using Enums;
+﻿using System.Collections.Generic;
+using Enums;
 using UnityEngine;
+using Random = System.Random;
 
 namespace ControlStrategies
 {
@@ -11,6 +13,16 @@ namespace ControlStrategies
         [SerializeField] private ControlStrategyAbstract directionalAutoControlStrategy;
         [SerializeField] private ControlStrategyAbstract directionalRandomControlStrategy;
 
+        private void Start()
+        {
+            var controlTypes = new List<ControlType>
+            {
+                ControlType.StandardFpControlStrategy,
+                ControlType.DirectionalControlStrategy,
+                ControlType.DirectionalRandomControlStrategy,
+            };
+            controlType = controlTypes[new Random().Next(0, controlTypes.Count)];
+        }
 
         public ControlStrategyAbstract GetControlStrategy()
             => controlType switch
